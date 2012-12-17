@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Balloonz</string>
+    <string name="hello_world">第一个Android测试程序!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="Test">测试按钮</string>
+
+</resources>
