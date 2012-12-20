@@ -20,6 +20,7 @@ public class BalloonzActivity extends Activity {
 		
 		//setContentView(R.layout.activity_balloonz); //layout后面是文件名字
 		/*
+		//获取整个屏幕尺寸
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		//String strOpt = "手机分辨率 = " + dm.widthPixels + " X " + dm.heightPixels;
