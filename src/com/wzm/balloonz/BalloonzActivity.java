@@ -1,6 +1,8 @@
 package com.wzm.balloonz;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
 import android.view.*;
 import android.util.DisplayMetrics;
@@ -10,41 +12,45 @@ import android.graphics.Color;
 
 public class BalloonzActivity extends Activity {
 
+	private BallWelcomeView ballWelcomeView;
+	
+	private Handler handler;
+	
+	private int width = 480;
+	private int height = 800;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		BallGameView ballView = new BallGameView(this);
-		setContentView(ballView);
-		
-		
-		//setContentView(R.layout.activity_balloonz); //layout后面是文件名字
 		/*
+		//全屏，但会先显示一下状态栏和标题栏，然后再全屏
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        */
 		//获取整个屏幕尺寸
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		//String strOpt = "手机分辨率 = " + dm.widthPixels + " X " + dm.heightPixels;
-		TextView textTest = (TextView)findViewById(R.id.textViewFirst);
-		textTest.setText(strOpt);
-		textTest.setTextColor(Color.RED);
+		width = dm.widthPixels;
+		height = dm.heightPixels;
 		
-		Button btnExit = (Button)findViewById(R.id.buttonTest);
-		btnExit.setOnClickListener(new Button.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				System.exit(0);
-			}
-		});
-		*/
+		ballWelcomeView = new BallWelcomeView(this);
+		
+		setContentView(ballWelcomeView);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_balloonz, menu);
-		return true;
+	
+	public void handleTouchMessage(Message msg)
+	{
+	
 	}
-
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	public int getHeight()
+	{
+		return height;
+	}
 }
