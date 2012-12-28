@@ -40,9 +40,9 @@ public class BalloonzActivity extends Activity {
 		setContentView(ballWelcomeView);
 	}
 	
-	public void handleTouchMessage(Message msg)
+	public void transVew(View view)
 	{
-	
+		setContentView(view);
 	}
 	
 	public int getWidth()

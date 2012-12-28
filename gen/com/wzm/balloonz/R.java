@@ -11,10 +11,11 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int quit_game=0x7f020001;
-        public static final int start_game=0x7f020002;
-        public static final int welcome_back=0x7f020003;
+        public static final int game_back=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int quit_game=0x7f020002;
+        public static final int start_game=0x7f020003;
+        public static final int welcome_back=0x7f020004;
     }
     public static final class layout {
         public static final int activity_balloonz=0x7f030000;

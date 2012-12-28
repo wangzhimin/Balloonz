@@ -4,7 +4,9 @@ package com.wzm.balloonz;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Paint.Align;
-import android.util.DisplayMetrics;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Handler.Callback;
 import android.view.*;
 
 
@@ -12,13 +14,14 @@ import android.view.*;
  * @author wangzhimin
  *
  */
-public class BallWelcomeView extends View {
+public class BallWelcomeView extends View
+{
 	private BalloonzActivity balloonzActivity;
 	
 	private Bitmap bitmapBackGround; //背景图片
 	
-	private Bitmap bitmapStartGame;
-	private Bitmap bitmapQuitGame;
+	private BitmapMenu menuStartGame;
+	private BitmapMenu menuQuitGame;
 	
 	private Paint paintPicture = new Paint();
 	private Paint paintText = new Paint();
@@ -26,8 +29,10 @@ public class BallWelcomeView extends View {
 	private int showWidth = 480;
 	private int showHeight = 800;
 	
-	private float touchX = 0;
-	private float touchY = 0;
+	private int touchX = 0;
+	private int touchY = 0;
+	
+	private Handler handlerWelcome = new Handler(new BallHandlerCallback());
 	
 	public BallWelcomeView(Context context)
 	{
@@ -40,7 +45,7 @@ public class BallWelcomeView extends View {
 		showHeight = balloonzActivity.getHeight();
 				
 		//加载图片资源
-		LoadResources();
+		InitGameResources();
 	}
 	
 	public void onDraw(Canvas canvas)
@@ -53,19 +58,11 @@ public class BallWelcomeView extends View {
 		drawWelcomeMenu(canvas);		
 		
 		paintText.setTextSize(22);
-		paintText.setColor(Color.BLUE);
+		paintText.setColor(Color.RED);
 		paintText.setTextAlign(Align.LEFT);
 
 		canvas.drawText("x=" + touchX, 100, 50, paintText);
 		canvas.drawText("y=" + touchY, 100, 100, paintText);
-		
-		//画几条线，测试屏幕尺寸和边界
-		int hMinus = 5;
-		canvas.drawLine(0, 1, showWidth, 1, paintText);
-		canvas.drawLine(0, showHeight-hMinus, showWidth, showHeight-hMinus, paintText);
-		
-		canvas.drawLine(0, showHeight/2, showWidth, showHeight/2, paintText);
-		canvas.drawLine(showWidth/2, 0, showWidth/2, showHeight, paintText);
 
 		/*
 		myPaint.setTypeface(Typeface.MONOSPACE);	
@@ -79,15 +76,45 @@ public class BallWelcomeView extends View {
 		*/
 	}
 	
+	//触屏处理, 根据点击区域,确定选择的菜单
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		touchX = event.getX();
-		touchY = event.getY();
+		int tmpX = (int) event.getX();
+		int tmpY = (int) event.getY();
+
+		if (menuStartGame.contains(tmpX, tmpY))
+		{
+			handlerWelcome.sendEmptyMessage(1);
+		}
+		else if (menuQuitGame.contains(tmpX, tmpY))
+		{
+			handlerWelcome.sendEmptyMessage(2);
+		}
 		
-		return true;
+		return super.onTouchEvent(event);
+	}
+	
+	private class BallHandlerCallback implements Callback
+	{
+		public boolean handleMessage(Message msg)
+		{
+			switch(msg.what)
+			{
+			case 1:
+				//切换画面
+				balloonzActivity.transVew(new GameView(balloonzActivity));
+				break;
+				
+			case 2:
+				System.exit(0);
+				break;
+			}
+
+			return true;
+		}
 	}
 
-	private void LoadResources()
+	private void InitGameResources()
 	{
 		//图片不缩放
 		BitmapFactory.Options bfoOptions = new BitmapFactory.Options();
@@ -95,8 +122,15 @@ public class BallWelcomeView extends View {
 
 		bitmapBackGround = BitmapFactory.decodeResource(getResources(), R.drawable.welcome_back, bfoOptions);
 
-		bitmapStartGame = BitmapFactory.decodeResource(getResources(), R.drawable.start_game, bfoOptions);
-		bitmapQuitGame = BitmapFactory.decodeResource(getResources(), R.drawable.quit_game, bfoOptions);
+		int centerX = showWidth / 2;
+		
+		Bitmap bitmapStartGame = BitmapFactory.decodeResource(getResources(), R.drawable.start_game, bfoOptions);
+		Rect start_rect = new Rect(centerX-bitmapStartGame.getWidth()/2, 200, centerX+bitmapStartGame.getWidth()/2-1, 200+bitmapStartGame.getHeight()-1);
+		menuStartGame = new BitmapMenu(bitmapStartGame, start_rect);
+		
+		Bitmap bitmapQuitGame = BitmapFactory.decodeResource(getResources(), R.drawable.quit_game, bfoOptions);
+		Rect quit_rect = new Rect(centerX-bitmapQuitGame.getWidth()/2, 500, centerX+bitmapQuitGame.getWidth()/2-1, 500+bitmapQuitGame.getHeight()-1);
+		menuQuitGame = new BitmapMenu(bitmapQuitGame, quit_rect);
 	}
 	//显示背景图片
 	private void drawBackGroundBitmap(Canvas canvas)
@@ -104,9 +138,10 @@ public class BallWelcomeView extends View {
 		canvas.drawBitmap(bitmapBackGround, 0, 0, paintPicture);
 	}
 
+	//显示开始界面菜单
 	private void drawWelcomeMenu(Canvas canvas)
 	{
-		canvas.drawBitmap(bitmapStartGame, (showWidth-bitmapStartGame.getWidth())/2, 200, paintPicture);
-		canvas.drawBitmap(bitmapQuitGame, (showWidth-bitmapQuitGame.getWidth())/2, 500, paintPicture);
+		canvas.drawBitmap(menuStartGame.bitmap(), menuStartGame.left(), menuStartGame.top(), paintPicture);
+		canvas.drawBitmap(menuQuitGame.bitmap(), menuQuitGame.left(), menuQuitGame.top(), paintPicture);
 	}
 }
