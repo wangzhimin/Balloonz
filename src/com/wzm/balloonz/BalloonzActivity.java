@@ -1,26 +1,22 @@
 package com.wzm.balloonz;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.app.Activity;
-import android.view.*;
 import android.util.DisplayMetrics;
-import android.widget.*;
-import android.graphics.Color;
 
 
-public class BalloonzActivity extends Activity {
+public class BalloonzActivity extends Activity
+{
 
 	private BallWelcomeView ballWelcomeView;
-	
-	private Handler handler;
+	private BallGameView ballGameView = null;
 	
 	private int width = 480;
 	private int height = 800;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		
 		/*
@@ -40,9 +36,29 @@ public class BalloonzActivity extends Activity {
 		setContentView(ballWelcomeView);
 	}
 	
-	public void transVew(View view)
+//	public void onBackPressed()
+//	{
+//	
+//	}
+	public void ProcessTransViewMsg(TransViewMsg msg)
 	{
-		setContentView(view);
+		switch(msg)
+		{
+		case Msg_startgame:
+			if (ballGameView == null)
+			{
+				ballGameView = new BallGameView(this);
+			}
+			setContentView(ballGameView);
+			break;
+		case Msg_quitgame:
+			System.exit(0);
+			break;
+			
+		case Msg_backtowelcome:
+			setContentView(ballWelcomeView);
+			break;
+		}
 	}
 	
 	public int getWidth()
