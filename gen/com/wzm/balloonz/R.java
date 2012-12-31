@@ -18,10 +18,11 @@ public final class R {
         public static final int game_back=0x7f020004;
         public static final int ic_launcher=0x7f020005;
         public static final int quit_game=0x7f020006;
-        public static final int start_game=0x7f020007;
-        public static final int tennis_ball=0x7f020008;
-        public static final int volley_ball=0x7f020009;
-        public static final int welcome_back=0x7f02000a;
+        public static final int rugby_ball=0x7f020007;
+        public static final int start_game=0x7f020008;
+        public static final int tennis_ball=0x7f020009;
+        public static final int volley_ball=0x7f02000a;
+        public static final int welcome_back=0x7f02000b;
     }
     public static final class layout {
         public static final int activity_balloonz=0x7f030000;

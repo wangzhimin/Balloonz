@@ -10,7 +10,7 @@ import java.util.*;
 
 public class BallPool
 {
-	private final int ROW_NUM    = 8;
+	private final int ROW_NUM    = 12;
 	private final int COLUMN_NUM = 8;
 	
 	private int ballWidth  = 50; //Ð¡ÇòµÄ³ß´ç
@@ -32,12 +32,12 @@ public class BallPool
 	public BallPool(BallGameView view)
 	{
 		left = 40;
-		top  = 200;
+		top  = 100;
 		
 		LoadResources(view);
 		InitBallPool();
 		
-		poolRect = new Rect(left, top, left + ballWidth * ROW_NUM, top + ballHeight * COLUMN_NUM);
+		poolRect = new Rect(left, top, left + ballWidth * COLUMN_NUM, top + ballHeight * ROW_NUM);
 	}
 	
 	private void LoadResources(BallGameView view)
@@ -46,12 +46,13 @@ public class BallPool
 		BitmapFactory.Options bfoOptions = new BitmapFactory.Options();
 		bfoOptions.inScaled = false;
 		
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.foot_ball, bfoOptions));		
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.basket_ball, bfoOptions));
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.volley_ball, bfoOptions));
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.bowling_ball, bfoOptions));
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.tennis_ball, bfoOptions));
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.billiards_ball, bfoOptions));
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.foot_ball, bfoOptions));	  //×ãÇò	
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.basket_ball, bfoOptions));  //ÀºÇò
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.volley_ball, bfoOptions));  //ÅÅÇò
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.bowling_ball, bfoOptions)); //±£ÁäÇò
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.tennis_ball, bfoOptions));  //ÍøÇò
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.rugby_ball, bfoOptions));   //éÏé­Çò
+		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.billiards_ball, bfoOptions)); //Ì¨Çò,ºÚ°Ë
 	}
 	
 	private void InitBallPool()
@@ -78,7 +79,10 @@ public class BallPool
 				int showX = left + column*ballWidth;
 				int showY = top + row*ballHeight;
 				
-				ballPool[row][column].onDraw(canvas, showX, showY, ballPaint);
+				if (ballPool[row][column] != null)
+				{
+					ballPool[row][column].onDraw(canvas, showX, showY, ballPaint);
+				}
 			}
 		}
 	}
@@ -87,8 +91,8 @@ public class BallPool
 	{
 		if (poolRect.contains(x, y))
 		{
-			int rowIndex = (x - left) / ballWidth;
-			int columnIndex = (y - top) / ballHeight;
+			int rowIndex = (y - top) / ballHeight; //ÐÐÏÂ±ê,ÓÃ×Ý×ø±êËã
+			int columnIndex = (x - left) / ballWidth;
 			
 			ballPool[rowIndex][columnIndex] = null;
 		}
