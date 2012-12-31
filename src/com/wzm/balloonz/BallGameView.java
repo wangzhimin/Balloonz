@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 
@@ -37,6 +38,23 @@ public class BallGameView extends View
 		super.onDraw(canvas);
 		
 		ballPool.onDraw(canvas);		
+	}
+	
+	//触屏，消球
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (event.getAction() == MotionEvent.ACTION_UP)
+		{
+			int touchX = (int) event.getX();
+			int touchY = (int) event.getY();
+
+            //通过点击坐标，定位球的index,消球
+			ballPool.KillBall(touchX, touchY);
+			
+			invalidate();
+		}
+
+		return true;
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event)

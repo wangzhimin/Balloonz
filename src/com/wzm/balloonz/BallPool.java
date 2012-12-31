@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+
 import java.util.*;
 
 public class BallPool
@@ -11,11 +13,13 @@ public class BallPool
 	private final int ROW_NUM    = 8;
 	private final int COLUMN_NUM = 8;
 	
-	private int ballWidth  = 50;
+	private int ballWidth  = 50; //小球的尺寸
 	private int ballHeight = 50;
 	
 	private int left = 0;
 	private int top  = 0;
+	
+	private Rect poolRect = null;
 	
 	ArrayList<Bitmap> bitmapCollection = new ArrayList<Bitmap>(); //存放8种球的bitmap，下标对应球类型
 	
@@ -31,7 +35,9 @@ public class BallPool
 		top  = 200;
 		
 		LoadResources(view);
-		InitBallPool();		
+		InitBallPool();
+		
+		poolRect = new Rect(left, top, left + ballWidth * ROW_NUM, top + ballHeight * COLUMN_NUM);
 	}
 	
 	private void LoadResources(BallGameView view)
@@ -74,6 +80,17 @@ public class BallPool
 				
 				ballPool[row][column].onDraw(canvas, showX, showY, ballPaint);
 			}
+		}
+	}
+	
+	public void KillBall(int x, int y)
+	{
+		if (poolRect.contains(x, y))
+		{
+			int rowIndex = (x - left) / ballWidth;
+			int columnIndex = (y - top) / ballHeight;
+			
+			ballPool[rowIndex][columnIndex] = null;
 		}
 	}
 }
