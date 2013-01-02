@@ -49,7 +49,7 @@ public class BallGameView extends View
 			int touchY = (int) event.getY();
 
             //通过点击坐标，定位球的index,消球
-			ballPool.KillBall(touchX, touchY);
+			ballPool.processTouchEvent(touchX, touchY);
 			
 			invalidate();
 		}
@@ -65,7 +65,7 @@ public class BallGameView extends View
 	    {
 	    	System.out.println("wzm onKeyDown, KEYCODE_BACK.");
 	    	
-	    	balloonzActivity.ProcessTransViewMsg(TransViewMsg.Msg_backtowelcome);   
+	    	balloonzActivity.processTouchMsg(TouchMsg.Msg_backtowelcome);   
 	    }
 	    return true;//return super.onKeyDown(keyCode, event);
 	}
