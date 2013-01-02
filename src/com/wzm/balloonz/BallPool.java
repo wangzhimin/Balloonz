@@ -186,17 +186,15 @@ public class BallPool
 	{
 		for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex) //一列一列的处理
 		{
+			//类似于冒泡排序,把空的给挪到上面去
 			for (int num = 0; num < ROW_NUM; ++num) //趟数
 			{
 				for (int rowIndex = ROW_NUM - 1; rowIndex > num; --rowIndex)
 				{
 					if (ballPool[rowIndex][columnIndex] == null)
 					{
-						for (int line = rowIndex; line > 0; --line)
-						{
-							ballPool[line][columnIndex] = ballPool[line - 1][columnIndex]; // 往下挪一个
-							ballPool[line - 1][columnIndex] = null;
-						}
+						ballPool[rowIndex][columnIndex] = ballPool[rowIndex - 1][columnIndex]; // 往下挪一个
+						ballPool[rowIndex - 1][columnIndex] = null;
 					}
 				}
 			}
