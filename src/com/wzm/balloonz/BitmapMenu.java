@@ -5,8 +5,8 @@ import android.graphics.*;
 
 public class BitmapMenu
 {
-	public Bitmap _bitmap = null;
-	public Rect   _rect = null;
+	private Bitmap _bitmap = null;
+	private Rect   _rect = null;
 	
 	public BitmapMenu(Bitmap bitmap, Rect rect)
 	{
@@ -14,23 +14,13 @@ public class BitmapMenu
 		_rect   = rect;
 	}
 	
-	public Bitmap bitmap()
-	{
-		return _bitmap;
-	}
-	
 	public boolean contains(int x, int y)
 	{
 		return _rect.contains(x, y);
 	}
 	
-	public int left()
+	public void onDraw(Canvas canvas, Paint menuPaint)
 	{
-		return _rect.left;
-	}
-	
-	public int top()
-	{
-		return _rect.top;
+		canvas.drawBitmap(_bitmap, _rect.left, _rect.top, menuPaint);
 	}
 }

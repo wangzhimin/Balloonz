@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -79,8 +77,7 @@ public class BallWelcomeView extends View
 		Rect quit_rect = new Rect(centerX - bitmapQuitGame.getWidth() / 2, 500, centerX + bitmapQuitGame.getWidth() / 2 - 1, 500 + bitmapQuitGame.getHeight() - 1);
 		menuQuitGame = new BitmapMenu(bitmapQuitGame, quit_rect);
 		
-		audioPlayer = MediaPlayer.create(balloonzActivity, R.raw.back_ground);
-		
+		audioPlayer = MediaPlayer.create(balloonzActivity, R.raw.back_ground);	
 	}
 	
 	public void onDraw(Canvas canvas)
@@ -159,17 +156,18 @@ public class BallWelcomeView extends View
 	// 显示开始界面菜单
 	private void drawWelcomeMenu(Canvas canvas)
 	{
-		canvas.drawBitmap(menuStartGame.bitmap(), menuStartGame.left(), menuStartGame.top(), paintPicture);
+		menuStartGame.onDraw(canvas, paintPicture);
+		
 		
 		if (balloonzActivity.getSound())
 		{
-			canvas.drawBitmap(menuSoundOpen.bitmap(), menuSoundOpen.left(), menuSoundOpen.top(), paintPicture);
+			menuSoundOpen.onDraw(canvas, paintPicture);
 		}
 		else
 		{
-			canvas.drawBitmap(menuSoundClose.bitmap(), menuSoundClose.left(), menuSoundClose.top(), paintPicture);
+			menuSoundClose.onDraw(canvas, paintPicture);
 		}
 		
-		canvas.drawBitmap(menuQuitGame.bitmap(), menuQuitGame.left(), menuQuitGame.top(), paintPicture);
+		menuQuitGame.onDraw(canvas, paintPicture);
 	}
 }
