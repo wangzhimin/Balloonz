@@ -19,19 +19,24 @@ public final class R {
         public static final int ic_launcher=0x7f020005;
         public static final int quit_game=0x7f020006;
         public static final int rugby_ball=0x7f020007;
-        public static final int start_game=0x7f020008;
-        public static final int tennis_ball=0x7f020009;
-        public static final int volley_ball=0x7f02000a;
-        public static final int welcome_back=0x7f02000b;
+        public static final int sound_close=0x7f020008;
+        public static final int sound_open=0x7f020009;
+        public static final int start_game=0x7f02000a;
+        public static final int tennis_ball=0x7f02000b;
+        public static final int volley_ball=0x7f02000c;
+        public static final int welcome_back=0x7f02000d;
     }
     public static final class layout {
         public static final int activity_balloonz=0x7f030000;
     }
     public static final class menu {
-        public static final int activity_balloonz=0x7f060000;
+        public static final int activity_balloonz=0x7f070000;
+    }
+    public static final class raw {
+        public static final int back_ground=0x7f040000;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
+        public static final int app_name=0x7f050000;
     }
     public static final class style {
         /** 
@@ -44,10 +49,10 @@ public final class R {
             backward-compatibility can go here.
         
          */
-        public static final int AppBaseTheme=0x7f050000;
+        public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f050001;
+        public static final int AppTheme=0x7f060001;
     }
 }

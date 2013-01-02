@@ -19,6 +19,10 @@ public class ColorBall
 	
 	public boolean equals(ColorBall another)
 	{
+		if(another == null)
+		{
+			return false;
+		}
 		return ballType == another.ballType;
 	}
 	

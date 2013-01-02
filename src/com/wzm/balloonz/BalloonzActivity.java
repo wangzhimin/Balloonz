@@ -11,6 +11,8 @@ public class BalloonzActivity extends Activity
 	private BallWelcomeView ballWelcomeView;
 	private BallGameView ballGameView = null;
 	
+	private boolean soundSwitch = false;
+	
 	private int width = 480;
 	private int height = 800;
 	
@@ -40,7 +42,7 @@ public class BalloonzActivity extends Activity
 //	{
 //	
 //	}
-	public void ProcessTransViewMsg(TransViewMsg msg)
+	public void processTouchMsg(TouchMsg msg)
 	{
 		switch(msg)
 		{
@@ -51,6 +53,11 @@ public class BalloonzActivity extends Activity
 			}
 			setContentView(ballGameView);
 			break;
+			
+		case Msg_sound:
+			soundSwitch = !soundSwitch;
+			break;
+			
 		case Msg_quitgame:
 			System.exit(0);
 			break;
@@ -69,4 +76,10 @@ public class BalloonzActivity extends Activity
 	{
 		return height;
 	}
+	
+	public boolean getSound()
+	{
+		return soundSwitch;
+	}
 }
+
