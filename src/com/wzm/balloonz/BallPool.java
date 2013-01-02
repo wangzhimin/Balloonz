@@ -128,6 +128,20 @@ public class BallPool
 				num_of_same++;
 			}
 		}
+		if (rowIndex > 0) //上
+		{
+			if (focus.equals(ballPool[rowIndex-1][columnIndex]))
+			{
+				num_of_same++;
+			}
+		}
+		if (rowIndex < ROW_NUM-1) //下
+		{
+			if (focus.equals(ballPool[rowIndex+1][columnIndex]))
+			{
+				num_of_same++;
+			}
+		}
 		
 		//根据相同球的数量,决定是否要消球
 		if (num_of_same > 0)
@@ -149,6 +163,20 @@ public class BallPool
 					killBall(rowIndex, columnIndex+1);
 				}
 			}
+			if (rowIndex > 0) //上
+			{
+				if (focus.equals(ballPool[rowIndex-1][columnIndex]))
+				{
+					killBall(rowIndex-1, columnIndex);
+				}
+			}
+			if (rowIndex < ROW_NUM-1) //下
+			{
+				if (focus.equals(ballPool[rowIndex+1][columnIndex]))
+				{
+					killBall(rowIndex+1, columnIndex);
+				}
+			}
 		}		
 		
 		return true;
@@ -156,18 +184,19 @@ public class BallPool
 	
 	private void up2down()
 	{
-		for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex)
+		for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex) //一列一列的处理
 		{
-			for (int rowIndex = ROW_NUM-1; rowIndex > 0; --rowIndex)
+			for (int num = 0; num < ROW_NUM; ++num) //趟数
 			{
-				
-				
-				if (ballPool[rowIndex][columnIndex] == null)
+				for (int rowIndex = ROW_NUM - 1; rowIndex > num; --rowIndex)
 				{
-					for (int line = rowIndex; line > 0; --line)
+					if (ballPool[rowIndex][columnIndex] == null)
 					{
-						ballPool[line][columnIndex] = ballPool[line-1][columnIndex]; //往下挪一个
-						ballPool[line-1][columnIndex] = null;
+						for (int line = rowIndex; line > 0; --line)
+						{
+							ballPool[line][columnIndex] = ballPool[line - 1][columnIndex]; // 往下挪一个
+							ballPool[line - 1][columnIndex] = null;
+						}
 					}
 				}
 			}
