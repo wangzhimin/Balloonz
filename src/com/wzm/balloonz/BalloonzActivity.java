@@ -1,17 +1,19 @@
 package com.wzm.balloonz;
 
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.DisplayMetrics;
+import android.media.MediaPlayer;
 
 
 public class BalloonzActivity extends Activity
 {
-
-	private BallWelcomeView ballWelcomeView;
-	private BallGameView ballGameView = null;
+	private BallWelcomeView ballWelcomeView;   //欢迎界面
+	private BallGameView ballGameView = null; //游戏界面
 	
 	private boolean soundSwitch = false;
+	private MediaPlayer audioPlayer = null;
 	
 	private int width = 480;
 	private int height = 800;
@@ -27,17 +29,10 @@ public class BalloonzActivity extends Activity
 		 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams. FLAG_FULLSCREEN);
         */
-		//获取整个屏幕尺寸
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		width = dm.widthPixels;
-		height = dm.heightPixels;
-		
-		ballWelcomeView = new BallWelcomeView(this);
-		
-		setContentView(ballWelcomeView);
+
+		initGame();
 	}
-	
+
 //	public void onBackPressed()
 //	{
 //	
@@ -59,7 +54,7 @@ public class BalloonzActivity extends Activity
 			break;
 			
 		case Msg_quitgame:
-			System.exit(0);
+			quitGame();
 			break;
 			
 		case Msg_backtowelcome:
@@ -80,6 +75,49 @@ public class BalloonzActivity extends Activity
 	public boolean getSound()
 	{
 		return soundSwitch;
+	}
+	public void playBackMusic()
+	{
+		if (soundSwitch)
+		{
+			try
+			{
+				audioPlayer.start();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			audioPlayer.pause();
+		}
+	}
+
+	//=====================================================
+	private void initGame()
+	{
+		// 获取整个屏幕尺寸
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		width = dm.widthPixels;
+		height = dm.heightPixels;
+		
+		ballWelcomeView = new BallWelcomeView(this);
+		setContentView(ballWelcomeView);
+		
+		audioPlayer = MediaPlayer.create(this, R.raw.back_ground);
+	}
+	
+	private void quitGame()
+	{
+		if (audioPlayer != null)
+		{
+			audioPlayer.stop();
+			audioPlayer.release();
+		}
+		System.exit(0);
 	}
 }
 

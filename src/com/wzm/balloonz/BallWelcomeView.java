@@ -2,7 +2,6 @@ package com.wzm.balloonz;
 
 import android.content.Context;
 import android.graphics.*;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -25,8 +24,6 @@ public class BallWelcomeView extends View
 	private int showHeight = 800;
 
 	private Handler handlerWelcome = new Handler(new BallHandlerCallback());
-
-	private MediaPlayer audioPlayer = null;
 	
 	public BallWelcomeView(Context context)
 	{
@@ -49,7 +46,7 @@ public class BallWelcomeView extends View
 	private void InitGameResources()
 	{
 		menuGroup = new BitmapMenuGroup(this, showWidth);
-		audioPlayer = MediaPlayer.create(balloonzActivity, R.raw.back_ground);	
+			
 	}
 	
 	public void onDraw(Canvas canvas)
@@ -87,22 +84,7 @@ public class BallWelcomeView extends View
 			case 2: //声音开关
 				balloonzActivity.processTouchMsg(TouchMsg.Msg_sound);
 				invalidate();
-				if (balloonzActivity.getSound())
-				{
-				    try
-					{
-						audioPlayer.prepare();
-						audioPlayer.start();
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
-				else
-				{
-					audioPlayer.stop();
-				}
+				balloonzActivity.playBackMusic();
 				break;
 				
 			case 5: //退出游戏
