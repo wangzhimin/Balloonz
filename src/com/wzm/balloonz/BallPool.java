@@ -231,7 +231,7 @@ public class BallPool
 	//某一列的最下面一行没球,代表这一列都没球了,右边的所有列向左平移
 	private void right2left()
 	{
-		for (int columnIndex = 0; columnIndex < COLUMN_NUM-1; ++columnIndex) //最右边一列无需处理
+		for (int columnIndex = COLUMN_NUM-2; columnIndex >= 0; --columnIndex) //最右边一列无需处理
 		{
 			if (ballPool[ROW_NUM-1][columnIndex] == null)
 			{
