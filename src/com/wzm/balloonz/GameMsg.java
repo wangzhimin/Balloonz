@@ -1,6 +1,6 @@
 package com.wzm.balloonz;
 
-public enum TouchMsg
+public enum GameMsg
 {
 	Msg_startgame,
 	Msg_sound,

@@ -4,6 +4,7 @@ package com.wzm.balloonz;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.media.MediaPlayer;
 
 
@@ -33,19 +34,13 @@ public class BalloonzActivity extends Activity
 		initGame();
 	}
 
-//	public void onBackPressed()
-//	{
-//	
-//	}
-	public void processTouchMsg(TouchMsg msg)
+	/* 事件响应函数 */
+	public void processGameMsg(GameMsg msg)
 	{
 		switch(msg)
 		{
 		case Msg_startgame:
-			if (ballGameView == null)
-			{
-				ballGameView = new BallGameView(this);
-			}
+			ballGameView = new BallGameView(this);
 			setContentView(ballGameView);
 			break;
 			
@@ -54,7 +49,7 @@ public class BalloonzActivity extends Activity
 			break;
 			
 		case Msg_quitgame:
-			quitGame();
+			finish();
 			break;
 			
 		case Msg_backtowelcome:
@@ -63,6 +58,27 @@ public class BalloonzActivity extends Activity
 		}
 	}
 	
+	public boolean onKeyUp(int keyCode, KeyEvent event)
+	{
+	    if (keyCode == KeyEvent.KEYCODE_BACK &&
+	    	event.getAction() == KeyEvent.ACTION_UP)
+	    {
+	    	finish();   
+	    }
+	    return true;
+	}
+	
+	public void onDestroy()
+	{
+		if (audioPlayer != null)
+		{
+			audioPlayer.stop();
+			audioPlayer.release();
+		}
+		
+		super.onDestroy();
+	}
+	/* 对外接口函数. */
 	public int getWidth()
 	{
 		return width;
@@ -95,7 +111,7 @@ public class BalloonzActivity extends Activity
 		}
 	}
 
-	//=====================================================
+	/* 私有函数 */
 	private void initGame()
 	{
 		// 获取整个屏幕尺寸
@@ -108,16 +124,6 @@ public class BalloonzActivity extends Activity
 		setContentView(ballWelcomeView);
 		
 		audioPlayer = MediaPlayer.create(this, R.raw.back_ground);
-	}
-	
-	private void quitGame()
-	{
-		if (audioPlayer != null)
-		{
-			audioPlayer.stop();
-			audioPlayer.release();
-		}
-		System.exit(0);
 	}
 }
 

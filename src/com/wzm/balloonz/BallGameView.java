@@ -22,6 +22,8 @@ public class BallGameView extends View
 		ballPool = new BallPool(this);
 		
 		setFocusable(true);
+		setFocusableInTouchMode(true);
+		requestFocus();
 	}
 
 	public void onDraw(Canvas canvas)
@@ -48,17 +50,14 @@ public class BallGameView extends View
 		return true;
 	}
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event)
+	public boolean onKeyUp(int keyCode, KeyEvent event)
 	{
-		System.out.println("wzm onKeyDown, keyCode = " + keyCode);
-		
-	    if (keyCode == KeyEvent.KEYCODE_BACK ) //&& event.getAction() == KeyEvent.ACTION_DOWN)
+	    if (keyCode == KeyEvent.KEYCODE_BACK &&
+	    	event.getAction() == KeyEvent.ACTION_UP)
 	    {
-	    	System.out.println("wzm onKeyDown, KEYCODE_BACK.");
-	    	
-	    	balloonzActivity.processTouchMsg(TouchMsg.Msg_backtowelcome);   
+	    	balloonzActivity.processGameMsg(GameMsg.Msg_backtowelcome);   
 	    }
-	    return true;//return super.onKeyDown(keyCode, event);
+	    return true; //如果要自己处理,就返回true
 	}
 	
 }

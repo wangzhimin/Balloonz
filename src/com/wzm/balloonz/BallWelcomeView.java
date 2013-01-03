@@ -5,6 +5,7 @@ import android.graphics.*;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -46,7 +47,6 @@ public class BallWelcomeView extends View
 	private void InitGameResources()
 	{
 		menuGroup = new BitmapMenuGroup(this, showWidth);
-			
 	}
 	
 	public void onDraw(Canvas canvas)
@@ -70,6 +70,16 @@ public class BallWelcomeView extends View
 		return true;
 	}
 
+	public boolean onKeyUp(int keyCode, KeyEvent event)
+	{
+	    if (keyCode == KeyEvent.KEYCODE_BACK &&
+	    	event.getAction() == KeyEvent.ACTION_UP)
+	    {
+	    	   
+	    }
+	    return false;
+	}
+	
 	private class BallHandlerCallback implements Callback
 	{
 		//处理当前界面的触屏事件
@@ -78,17 +88,17 @@ public class BallWelcomeView extends View
 			switch (msg.what)
 			{
 			case 1: //开始游戏
-				balloonzActivity.processTouchMsg(TouchMsg.Msg_startgame);
+				balloonzActivity.processGameMsg(GameMsg.Msg_startgame);
 				break;
 
 			case 2: //声音开关
-				balloonzActivity.processTouchMsg(TouchMsg.Msg_sound);
+				balloonzActivity.processGameMsg(GameMsg.Msg_sound);
 				invalidate();
 				balloonzActivity.playBackMusic();
 				break;
 				
 			case 5: //退出游戏
-				balloonzActivity.processTouchMsg(TouchMsg.Msg_quitgame);
+				balloonzActivity.processGameMsg(GameMsg.Msg_quitgame);
 				break;
 			}
 
