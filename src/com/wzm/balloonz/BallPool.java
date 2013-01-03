@@ -15,6 +15,9 @@ public class BallPool
 	
 	private final int ballWidth  = 50; //Ð¡ÇòµÄ³ß´ç
 	private final int ballHeight = 50;
+	
+	private int gameDifficultyLevel = 1;
+	
 	ArrayList<Bitmap> bitmapCollection = new ArrayList<Bitmap>(); //´æ·Å8ÖÖÇòµÄbitmap£¬ÏÂ±ê¶ÔÓ¦ÇòÀàÐÍ
 	
 	private int left = 0;
@@ -48,9 +51,17 @@ public class BallPool
 		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.basket_ball, bfoOptions));  //ÀºÇò
 		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.volley_ball, bfoOptions));  //ÅÅÇò
 		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.bowling_ball, bfoOptions)); //±£ÁäÇò
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.tennis_ball, bfoOptions));  //ÍøÇò
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.rugby_ball, bfoOptions));   //éÏé­Çò
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.billiards_ball, bfoOptions)); //Ì¨Çò,ºÚ°Ë
+		
+		if (gameDifficultyLevel == 2)
+		{
+			bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.tennis_ball, bfoOptions));  //ÍøÇò
+			bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.rugby_ball, bfoOptions));   //éÏé­Çò
+		}
+		
+		if (gameDifficultyLevel == 3)
+		{
+			bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.billiards_ball, bfoOptions)); //Ì¨Çò,ºÚ°Ë
+		}
 	}
 	
 	private void InitBallPool()
