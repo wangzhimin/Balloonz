@@ -43,8 +43,6 @@ public class BallGameView extends View
 
             //通过点击坐标，定位球的index,消球
 			ballPool.processTouchEvent(touchX, touchY);
-			
-			invalidate();
 		}
 
 		return true;

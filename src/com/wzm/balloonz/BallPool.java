@@ -1,5 +1,6 @@
 package com.wzm.balloonz;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,6 +11,8 @@ import java.util.*;
 
 public class BallPool
 {
+	private BallGameView gameView = null;
+	
 	private final int ROW_NUM    = 12;
 	private final int COLUMN_NUM = 8;
 	
@@ -32,35 +35,39 @@ public class BallPool
 	
 	public BallPool(BallGameView view)
 	{
+		gameView = view;
+		
 		left = 40;
 		top  = 100;
 		
-		LoadResources(view);
+		LoadResources();
 		InitBallPool();
 		
 		poolRect = new Rect(left, top, left + ballWidth * COLUMN_NUM, top + ballHeight * ROW_NUM);
 	}
 	
-	private void LoadResources(BallGameView view)
+	private void LoadResources()
 	{
 		// 图片不缩放
 		BitmapFactory.Options bfoOptions = new BitmapFactory.Options();
 		bfoOptions.inScaled = false;
 		
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.foot_ball, bfoOptions));	  //足球	
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.basket_ball, bfoOptions));  //篮球
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.volley_ball, bfoOptions));  //排球
-		bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.bowling_ball, bfoOptions)); //保龄球
+		Resources res = gameView.getResources();
+		
+		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.foot_ball, bfoOptions));	  //足球	
+		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.basket_ball, bfoOptions));  //篮球
+		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.volley_ball, bfoOptions));  //排球
+		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.bowling_ball, bfoOptions)); //保龄球
 		
 		if (gameDifficultyLevel == 2)
 		{
-			bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.tennis_ball, bfoOptions));  //网球
-			bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.rugby_ball, bfoOptions));   //橄榄球
+			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.tennis_ball, bfoOptions));  //网球
+			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.rugby_ball, bfoOptions));   //橄榄球
 		}
 		
 		if (gameDifficultyLevel == 3)
 		{
-			bitmapCollection.add(BitmapFactory.decodeResource(view.getResources(), R.drawable.billiards_ball, bfoOptions)); //台球,黑八
+			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.billiards_ball, bfoOptions)); //台球,黑八
 		}
 	}
 	
@@ -105,9 +112,20 @@ public class BallPool
 			
 			num_of_same = 0;
 			killBall(rowIndex, columnIndex);
+			gameView.invalidate(poolRect);
 			
 			if (num_of_same > 0)
 			{
+				//硬阻塞一秒
+				long now = System.currentTimeMillis();
+				for(;;)
+				{
+					long next = System.currentTimeMillis();
+					if (next - now > 1000)
+					{
+						break;
+					}
+				}
 				up2down();
 				right2left();
 			}
@@ -206,6 +224,8 @@ public class BallPool
 				}
 			}
 		}
+		
+		gameView.invalidate(poolRect);
 	}
 	
 	//某一列的最下面一行没球,代表这一列都没球了,右边的所有列向左平移
@@ -225,5 +245,7 @@ public class BallPool
 				}
 			}
 		}
+		
+		gameView.invalidate(poolRect);
 	}
 }
