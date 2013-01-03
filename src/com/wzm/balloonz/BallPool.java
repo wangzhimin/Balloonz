@@ -13,23 +13,19 @@ public class BallPool
 	private final int ROW_NUM    = 12;
 	private final int COLUMN_NUM = 8;
 	
-	private int ballWidth  = 50; //小球的尺寸
-	private int ballHeight = 50;
+	private final int ballWidth  = 50; //小球的尺寸
+	private final int ballHeight = 50;
+	ArrayList<Bitmap> bitmapCollection = new ArrayList<Bitmap>(); //存放8种球的bitmap，下标对应球类型
 	
 	private int left = 0;
 	private int top  = 0;
 	
-	private Rect poolRect = null;
-	
-	ArrayList<Bitmap> bitmapCollection = new ArrayList<Bitmap>(); //存放8种球的bitmap，下标对应球类型
-	
 	private ColorBall[][] ballPool = new ColorBall[ROW_NUM][COLUMN_NUM];
+	private Rect poolRect = null;
+	private int num_of_same = 0;
 	
 	private Paint ballPaint = new Paint();
-	
 	private Random rand = new Random();
-
-	private int num_of_same = 0;
 	
 	public BallPool(BallGameView view)
 	{
@@ -102,6 +98,7 @@ public class BallPool
 			if (num_of_same > 0)
 			{
 				up2down();
+				right2left();
 			}
 		}
 	}
@@ -143,10 +140,9 @@ public class BallPool
 			}
 		}
 		
-		//根据相同球的数量,决定是否要消球
-		if (num_of_same > 0)
+		if (num_of_same > 0) //根据相同球的数量,决定是否要消球
 		{
-			ballPool[rowIndex][columnIndex] = null;
+			ballPool[rowIndex][columnIndex] = null; //先把自己消掉,这样邻居在比较的时候就不需要额外的标记
 		
 			if (columnIndex > 0) //左
 			{	
@@ -189,12 +185,31 @@ public class BallPool
 			//类似于冒泡排序,把空的给挪到上面去
 			for (int num = 0; num < ROW_NUM; ++num) //趟数
 			{
-				for (int rowIndex = ROW_NUM - 1; rowIndex > num; --rowIndex)
+				for (int rowIndex = ROW_NUM - 1; rowIndex > num; --rowIndex) //最上面一行无需处理
 				{
 					if (ballPool[rowIndex][columnIndex] == null)
 					{
 						ballPool[rowIndex][columnIndex] = ballPool[rowIndex - 1][columnIndex]; // 往下挪一个
 						ballPool[rowIndex - 1][columnIndex] = null;
+					}
+				}
+			}
+		}
+	}
+	
+	//某一列的最下面一行没球,代表这一列都没球了,右边的所有列向左平移
+	private void right2left()
+	{
+		for (int columnIndex = 0; columnIndex < COLUMN_NUM-1; ++columnIndex) //最右边一列无需处理
+		{
+			if (ballPool[ROW_NUM-1][columnIndex] == null)
+			{
+				for (int moveIndex = columnIndex; moveIndex < COLUMN_NUM-1; ++moveIndex) 
+				{
+					for(int row = 0; row < ROW_NUM; ++row)
+					{
+						ballPool[row][moveIndex] = ballPool[row][moveIndex+1];
+						ballPool[row][moveIndex+1] = null;
 					}
 				}
 			}
