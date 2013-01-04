@@ -17,8 +17,7 @@ public class BallWelcomeView extends View
 {
 	private BalloonzActivity balloonzActivity;
 	
-	BitmapMenuGroup menuGroup = null;
-	
+	BitmapMenuGroup menuGroup = null;	
 	private Paint paintPicture = new Paint();
 
 	private int showWidth = 480;
@@ -97,6 +96,11 @@ public class BallWelcomeView extends View
 				balloonzActivity.playBackMusic();
 				break;
 				
+			case 3:
+				balloonzActivity.processGameMsg(GameMsg.Msg_level);
+				invalidate();
+				break;
+				
 			case 5: //ÍË³öÓÎÏ·
 				balloonzActivity.processGameMsg(GameMsg.Msg_quitgame);
 				break;
@@ -110,4 +114,9 @@ public class BallWelcomeView extends View
 	{
 		return balloonzActivity.getSound();
 	}
+	public int getLevel()
+	{
+		return balloonzActivity.getLevel();
+	}
+	
 }

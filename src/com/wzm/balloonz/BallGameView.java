@@ -23,7 +23,7 @@ public class BallGameView extends View
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.game_back));
 		textPaint.setColor(Color.WHITE);
 		
-		ballPool = new BallPool(this);
+		ballPool = new BallPool(this, balloonzActivity.getLevel());
 		
 		setFocusable(true);
 		setFocusableInTouchMode(true);
@@ -55,7 +55,6 @@ public class BallGameView extends View
 			if (killNum >= 2)
 			{
 				score = fibonacci(killNum);
-				WzmLog.log("score = " + score);
 			}
 		}
 

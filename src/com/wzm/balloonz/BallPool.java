@@ -14,9 +14,8 @@ public class BallPool
 	private final int ballWidth  = 50; //小球的尺寸
 	private final int ballHeight = 50;
 	
-	private int gameDifficultyLevel = 1;
-	
 	ArrayList<Bitmap> bitmapCollection = new ArrayList<Bitmap>(); //存放8种球的bitmap，下标对应球类型
+	private int gameLevel = 1; //游戏难度
 	
 	private int left = 0;
 	private int top  = 0;
@@ -28,9 +27,10 @@ public class BallPool
 	private Paint ballPaint = new Paint();
 	private Random rand = new Random();
 	
-	public BallPool(BallGameView view)
+	public BallPool(BallGameView view, int level)
 	{
 		gameView = view;
+		gameLevel = level;
 		
 		left = 40;
 		top  = 100;
@@ -53,13 +53,13 @@ public class BallPool
 		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.volley_ball, bfoOptions));  //排球
 		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.bowling_ball, bfoOptions)); //保龄球
 		
-		if (gameDifficultyLevel == 2)
+		if (gameLevel >= 2)
 		{
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.tennis_ball, bfoOptions));  //网球
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.rugby_ball, bfoOptions));   //橄榄球
 		}
 		
-		if (gameDifficultyLevel == 3)
+		if (gameLevel == 3)
 		{
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.billiards_ball, bfoOptions)); //台球,黑八
 		}

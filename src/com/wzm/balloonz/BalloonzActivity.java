@@ -14,6 +14,7 @@ public class BalloonzActivity extends Activity
 	private BallGameView ballGameView = null; //游戏界面
 	
 	private boolean soundSwitch = false;
+	private int gameDifficultyLevel = 1;
 	private MediaPlayer audioPlayer = null;
 	
 	private int width = 480;
@@ -33,7 +34,20 @@ public class BalloonzActivity extends Activity
 
 		initGame();
 	}
-
+	private void initGame()
+	{
+		// 获取整个屏幕尺寸
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		width = dm.widthPixels;
+		height = dm.heightPixels;
+		
+		ballWelcomeView = new BallWelcomeView(this);
+		setContentView(ballWelcomeView);
+		
+		audioPlayer = MediaPlayer.create(this, R.raw.back_ground);
+	}
+	
 	/* 事件响应函数 */
 	public void processGameMsg(GameMsg msg)
 	{
@@ -46,6 +60,14 @@ public class BalloonzActivity extends Activity
 			
 		case Msg_sound:
 			soundSwitch = !soundSwitch;
+			break;
+			
+		case Msg_level:
+			gameDifficultyLevel++;
+			if (gameDifficultyLevel > 3)
+			{
+				gameDifficultyLevel = 1;
+			}
 			break;
 			
 		case Msg_quitgame:
@@ -110,20 +132,11 @@ public class BalloonzActivity extends Activity
 			audioPlayer.pause();
 		}
 	}
-
-	/* 私有函数 */
-	private void initGame()
+	public int getLevel()
 	{
-		// 获取整个屏幕尺寸
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		width = dm.widthPixels;
-		height = dm.heightPixels;
-		
-		ballWelcomeView = new BallWelcomeView(this);
-		setContentView(ballWelcomeView);
-		
-		audioPlayer = MediaPlayer.create(this, R.raw.back_ground);
+		return gameDifficultyLevel;
 	}
+	/* 私有函数 */
+	
 }
 
