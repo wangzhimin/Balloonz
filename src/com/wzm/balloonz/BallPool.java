@@ -1,12 +1,7 @@
 package com.wzm.balloonz;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-
+import android.graphics.*;
 import java.util.*;
 
 public class BallPool
@@ -45,7 +40,6 @@ public class BallPool
 		
 		poolRect = new Rect(left, top, left + ballWidth * COLUMN_NUM, top + ballHeight * ROW_NUM);
 	}
-	
 	private void LoadResources()
 	{
 		// 图片不缩放
@@ -70,7 +64,6 @@ public class BallPool
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.billiards_ball, bfoOptions)); //台球,黑八
 		}
 	}
-	
 	private void InitBallPool()
 	{
 		int max_num = bitmapCollection.size();
@@ -110,18 +103,18 @@ public class BallPool
 			int rowIndex    = (y - top) / ballHeight; //行下标,用纵坐标算
 			int columnIndex = (x - left) / ballWidth;
 			
-			num_of_same = 0;
+			num_of_same = 1;
 			killBall(rowIndex, columnIndex);
-			gameView.invalidate(poolRect);
+			gameView.invalidate();
 			
-			if (num_of_same > 0)
+			if (num_of_same > 1)
 			{
-				//硬阻塞一秒
+				//硬阻塞
 				long now = System.currentTimeMillis();
 				for(;;)
 				{
 					long next = System.currentTimeMillis();
-					if (next - now > 1000)
+					if (next - now > 400)
 					{
 						break;
 					}
@@ -131,7 +124,14 @@ public class BallPool
 			}
 		}
 	}
+
+	/* 对外接口函数. */
+	public int getKillNum()
+	{
+		return num_of_same;
+	}
 	
+	/* 私有函数 */
 	private boolean killBall(int rowIndex, int columnIndex)
 	{
 		ColorBall focus = ballPool[rowIndex][columnIndex];
@@ -169,7 +169,7 @@ public class BallPool
 			}
 		}
 		
-		if (num_of_same > 0) //根据相同球的数量,决定是否要消球
+		if (num_of_same > 1) //根据相同球的数量,决定是否要消球
 		{
 			ballPool[rowIndex][columnIndex] = null; //先把自己消掉,这样邻居在比较的时候就不需要额外的标记
 		
