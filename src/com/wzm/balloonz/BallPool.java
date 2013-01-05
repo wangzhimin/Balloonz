@@ -2,6 +2,8 @@ package com.wzm.balloonz;
 
 import android.content.res.Resources;
 import android.graphics.*;
+import android.view.View;
+
 import java.util.*;
 
 public class BallPool
@@ -13,8 +15,12 @@ public class BallPool
 	
 	private final int ballWidth  = 50; //小球的尺寸
 	private final int ballHeight = 50;
-	
+
 	ArrayList<Bitmap> bitmapCollection = new ArrayList<Bitmap>(); //存放8种球的bitmap，下标对应球类型
+	
+	private Bitmap fireballBitmap;
+	private ColorBall ballFireBall;
+	
 	private int gameLevel = 1; //游戏难度
 	
 	private int left = 0;
@@ -63,6 +69,8 @@ public class BallPool
 		{
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.billiards_ball, bfoOptions)); //台球,黑八
 		}
+		fireballBitmap = BitmapFactory.decodeResource(res, R.drawable.fire_ball, bfoOptions);
+		ballFireBall = new ColorBall(0xff, fireballBitmap);
 	}
 	private void InitBallPool()
 	{
@@ -109,18 +117,11 @@ public class BallPool
 			
 			if (num_of_same > 1)
 			{
-				//硬阻塞
-				long now = System.currentTimeMillis();
-				for(;;)
-				{
-					long next = System.currentTimeMillis();
-					if (next - now > 400)
-					{
-						break;
-					}
-				}
 				up2down();
+				gameView.invalidate();
+
 				right2left();
+				gameView.invalidate();
 			}
 		}
 	}
@@ -224,8 +225,6 @@ public class BallPool
 				}
 			}
 		}
-		
-		gameView.invalidate(poolRect);
 	}
 	
 	//某一列的最下面一行没球,代表这一列都没球了,右边的所有列向左平移
@@ -245,7 +244,5 @@ public class BallPool
 				}
 			}
 		}
-		
-		gameView.invalidate(poolRect);
 	}
 }

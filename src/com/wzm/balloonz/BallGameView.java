@@ -11,7 +11,7 @@ public class BallGameView extends View
 {
 	private BalloonzActivity balloonzActivity;
 	private BallPool ballPool = null;
-
+	
 	private Paint textPaint = new Paint();
 	private int score = 0;
 	
@@ -19,7 +19,7 @@ public class BallGameView extends View
 	{
 		super(context);		
 		balloonzActivity = (BalloonzActivity) context;
-
+		
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.game_back));
 		textPaint.setColor(Color.WHITE);
 		
@@ -29,13 +29,12 @@ public class BallGameView extends View
 		setFocusableInTouchMode(true);
 		requestFocus();
 	}
-
+	
 	public void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		
+
 		ballPool.onDraw(canvas);
-		
 		canvas.drawText("分数:" + score, 10, 750, textPaint);
 	}
 	
@@ -54,7 +53,7 @@ public class BallGameView extends View
 			
 			if (killNum >= 2)
 			{
-				score = fibonacci(killNum);
+				score = fibonacci(killNum);				
 			}
 		}
 
@@ -70,6 +69,9 @@ public class BallGameView extends View
 	    }
 	    return true; //如果要自己处理,就返回true
 	}
+	
+	
+	/* 私有函数. */
 	private int fibonacci(int n)
 	{		
 		double Root_of_Five = Math.sqrt(5);
@@ -77,6 +79,5 @@ public class BallGameView extends View
 		double result = (Math.pow((1 + Root_of_Five)/2, n) - Math.pow((1-Root_of_Five)/2, n)) / Root_of_Five; 
 		
 		return (int)result;
-		
-	}
+	}	
 }

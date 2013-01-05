@@ -46,6 +46,10 @@ public class BalloonzActivity extends Activity
 		setContentView(ballWelcomeView);
 		
 		audioPlayer = MediaPlayer.create(this, R.raw.back_ground);
+		if (audioPlayer == null)
+		{
+			WzmLog.log("initGame audioPlayer == null.");
+		}
 	}
 	
 	/* 事件响应函数 */
@@ -120,6 +124,11 @@ public class BalloonzActivity extends Activity
 		{
 			try
 			{
+				if (audioPlayer == null)
+				{
+					WzmLog.log("audioPlayer == null.");
+					return;
+				}
 				audioPlayer.start();
 			}
 			catch (Exception e)

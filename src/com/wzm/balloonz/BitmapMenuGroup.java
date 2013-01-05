@@ -28,6 +28,16 @@ public class BitmapMenuGroup
 		
 		InitMenu();
 	}
+	private void InitMenu()
+	{
+		menuStartGame  = getMenu(R.drawable.start_game, 200);     //开始游戏
+		menuSoundOpen  = getMenu(R.drawable.sound_open, 300);     //声音开关
+		menuSoundClose = getMenu(R.drawable.sound_close, 300);    //
+		menuLevelLow   = getMenu(R.drawable.level_l, 400);        //游戏难度
+		menuLevelMid   = getMenu(R.drawable.level_m, 400);
+		menuLevelHigh  = getMenu(R.drawable.level_h, 400);
+		menuQuitGame   = getMenu(R.drawable.quit_game, 500);      //退出游戏
+	}
 	
 	public void onDraw(Canvas canvas, Paint paintPicture)
 	{
@@ -78,16 +88,7 @@ public class BitmapMenuGroup
 		}
 	}
 	
-	private void InitMenu()
-	{
-		menuStartGame  = getMenu(R.drawable.start_game, 200);     //开始游戏
-		menuSoundOpen  = getMenu(R.drawable.sound_open, 300);     //声音开关
-		menuSoundClose = getMenu(R.drawable.sound_close, 300);    //
-		menuLevelLow   = getMenu(R.drawable.level_l, 400);        //游戏难度
-		menuLevelMid   = getMenu(R.drawable.level_m, 400);
-		menuLevelHigh  = getMenu(R.drawable.level_h, 400);
-		menuQuitGame   = getMenu(R.drawable.quit_game, 500);      //退出游戏
-	}
+	
 	//创建单个menu
 	private BitmapMenu getMenu(int bitmapId, int y)
 	{

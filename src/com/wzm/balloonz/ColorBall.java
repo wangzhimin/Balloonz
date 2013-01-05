@@ -11,9 +11,9 @@ public class ColorBall
 	private int ballType; //即数组下标,对应一个球的bitmap
 	private Bitmap ballBitmap;
 	
-	public ColorBall(int index, Bitmap bitmap)
+	public ColorBall(int type, Bitmap bitmap)
 	{
-		ballType   = index;
+		ballType   = type;
 		ballBitmap = bitmap;
 	}
 	

@@ -118,5 +118,4 @@ public class BallWelcomeView extends View
 	{
 		return balloonzActivity.getLevel();
 	}
-	
 }
