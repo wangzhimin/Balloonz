@@ -32,7 +32,7 @@ public class BallWelcomeView extends View
 		balloonzActivity = (BalloonzActivity) context;
 
 		// 获取当前view尺寸
-		showWidth = balloonzActivity.getWidth();
+		showWidth  = balloonzActivity.getWidth();
 		showHeight = balloonzActivity.getHeight();
 
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.welcome_back));
@@ -91,9 +91,10 @@ public class BallWelcomeView extends View
 				break;
 
 			case 2: //声音开关
-				balloonzActivity.processGameMsg(GameMsg.Msg_sound);
+				GameSoundSystem soundSystem = GameSoundSystem.getInstance();
+				soundSystem.processGameMsg(GameMsg.Msg_sound);
 				invalidate();
-				balloonzActivity.playBackMusic();
+				soundSystem.playBackMusic();
 				break;
 				
 			case 3:
@@ -110,10 +111,6 @@ public class BallWelcomeView extends View
 		}
 	}
 
-	public boolean getSoundSwitch()
-	{
-		return balloonzActivity.getSound();
-	}
 	public int getLevel()
 	{
 		return balloonzActivity.getLevel();

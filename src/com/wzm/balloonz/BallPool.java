@@ -2,8 +2,7 @@ package com.wzm.balloonz;
 
 import android.content.res.Resources;
 import android.graphics.*;
-import android.text.StaticLayout;
-import android.view.View;
+
 
 import java.util.*;
 

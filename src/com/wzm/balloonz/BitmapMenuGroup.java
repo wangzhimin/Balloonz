@@ -43,7 +43,7 @@ public class BitmapMenuGroup
 	{
 		menuStartGame.onDraw(canvas, paintPicture);
 		
-		if (_view.getSoundSwitch())
+		if (GameSoundSystem.getInstance().getSoundSwitch())
 		{
 			menuSoundOpen.onDraw(canvas, paintPicture);
 		}
