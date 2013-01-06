@@ -1,5 +1,7 @@
 package com.wzm.balloonz;
 
+import java.security.PublicKey;
+
 import android.content.Context;
 import android.graphics.*;
 import android.view.KeyEvent;
@@ -46,15 +48,8 @@ public class BallGameView extends View
 			int touchX = (int) event.getX();
 			int touchY = (int) event.getY();
 
-            //通过点击坐标，定位球的index,消球
-			ballPool.processTouchEvent(touchX, touchY);
-			
-			int killNum = ballPool.getKillNum();
-			
-			if (killNum >= 2)
-			{
-				score = fibonacci(killNum);				
-			}
+            GameThread gameThread = new GameThread(touchX, touchY);
+            gameThread.start();
 		}
 
 		return true;
@@ -70,6 +65,29 @@ public class BallGameView extends View
 	    return true; //如果要自己处理,就返回true
 	}
 	
+	private class GameThread extends Thread
+	{
+		private int touchX;
+		private int touchY;
+		
+		public GameThread(int x, int y)
+		{
+			touchX = x;
+			touchY = y;
+		}
+		public void run()
+		{
+			 //通过点击坐标，定位球的index,消球
+			ballPool.processTouchEvent(touchX, touchY);
+			
+			int killNum = ballPool.getKillNum();
+			
+			if (killNum >= 2)
+			{
+				score = fibonacci(killNum);
+			}
+		}
+	}
 	
 	/* 私有函数. */
 	private int fibonacci(int n)

@@ -2,6 +2,7 @@ package com.wzm.balloonz;
 
 import android.content.res.Resources;
 import android.graphics.*;
+import android.text.StaticLayout;
 import android.view.View;
 
 import java.util.*;
@@ -28,7 +29,8 @@ public class BallPool
 	
 	private ColorBall[][] ballPool = new ColorBall[ROW_NUM][COLUMN_NUM];
 	private Rect poolRect = null;
-	private int num_of_same = 0;
+	private int num_of_killed = 0;//真正消的数量
+	private ColorBall ballFocus = null;
 	
 	private Paint ballPaint = new Paint();
 	private Random rand = new Random();
@@ -111,17 +113,20 @@ public class BallPool
 			int rowIndex    = (y - top) / ballHeight; //行下标,用纵坐标算
 			int columnIndex = (x - left) / ballWidth;
 			
-			num_of_same = 1;
-			killBall(rowIndex, columnIndex);
-			gameView.invalidate();
+			int numToKill = getNumToKill(rowIndex, columnIndex); //消之前预估的数量,只要第一个球预估数大于1即可
 			
-			if (num_of_same > 1)
+			if (numToKill > 1) //根据相同球的数量,决定是否要消球,只有第一个球才需要判断
 			{
-				up2down();
-				gameView.invalidate();
-
-				right2left();
-				gameView.invalidate();
+				num_of_killed = 1;
+				ballFocus = ballPool[rowIndex][columnIndex];
+				killBall(rowIndex, columnIndex);
+				gameView.postInvalidate();
+				
+				if (num_of_killed > 1) //消了球,才需要重新调整位置
+				{				
+					up2down();	
+					right2left();
+				}
 			}
 		}
 	}
@@ -129,87 +134,97 @@ public class BallPool
 	/* 对外接口函数. */
 	public int getKillNum()
 	{
-		return num_of_same;
+		return num_of_killed;
 	}
 	
 	/* 私有函数 */
-	private boolean killBall(int rowIndex, int columnIndex)
+	private void killBall(int rowIndex, int columnIndex)
 	{
+		ColorBall me = ballPool[rowIndex][columnIndex];
+		if (me == null ||
+			!me.equals(ballFocus))
+		{
+			return;
+		}
+		
+		ballPool[rowIndex][columnIndex] = null; // 先把自己消掉,这样邻居在比较的时候就不需要额外的标记
+		num_of_killed++;
+
+		if (columnIndex > 0) // 左
+		{
+			if (me.equals(ballPool[rowIndex][columnIndex - 1]))
+			{
+				killBall(rowIndex, columnIndex - 1); // 递归左边
+			}
+		}
+
+		if (columnIndex < COLUMN_NUM - 1) // 右
+		{
+			if (me.equals(ballPool[rowIndex][columnIndex + 1]))
+			{
+				killBall(rowIndex, columnIndex + 1);
+			}
+		}
+		if (rowIndex > 0) // 上
+		{
+			if (me.equals(ballPool[rowIndex - 1][columnIndex]))
+			{
+				killBall(rowIndex - 1, columnIndex);
+			}
+		}
+		if (rowIndex < ROW_NUM - 1) // 下
+		{
+			if (me.equals(ballPool[rowIndex + 1][columnIndex]))
+			{
+				killBall(rowIndex + 1, columnIndex);
+			}
+		}
+	}
+	
+	private int getNumToKill(int rowIndex, int columnIndex)
+	{
+		int numToKill = 1;
 		ColorBall focus = ballPool[rowIndex][columnIndex];
-		if (focus == null)
-		{
-			return true;
-		}
-		//先看一下上下左右有没有相同的球
-		if (columnIndex > 0) //左
-		{	
-			if (focus.equals(ballPool[rowIndex][columnIndex-1]))
-			{
-				num_of_same++;
-			}
-		}
-		if (columnIndex < COLUMN_NUM-1) //右
-		{
-			if (focus.equals(ballPool[rowIndex][columnIndex+1]))
-			{
-				num_of_same++;
-			}
-		}
-		if (rowIndex > 0) //上
-		{
-			if (focus.equals(ballPool[rowIndex-1][columnIndex]))
-			{
-				num_of_same++;
-			}
-		}
-		if (rowIndex < ROW_NUM-1) //下
-		{
-			if (focus.equals(ballPool[rowIndex+1][columnIndex]))
-			{
-				num_of_same++;
-			}
-		}
 		
-		if (num_of_same > 1) //根据相同球的数量,决定是否要消球
+		if (focus != null)
 		{
-			ballPool[rowIndex][columnIndex] = null; //先把自己消掉,这样邻居在比较的时候就不需要额外的标记
-		
-			if (columnIndex > 0) //左
-			{	
-				if (focus.equals(ballPool[rowIndex][columnIndex-1]))
+			// 先看一下上下左右有没有相同的球
+			if (columnIndex > 0) // 左
+			{
+				if (focus.equals(ballPool[rowIndex][columnIndex - 1]))
 				{
-					killBall(rowIndex, columnIndex-1); //递归左边
+					numToKill++;
 				}
 			}
-			
 			if (columnIndex < COLUMN_NUM - 1) // 右
 			{
 				if (focus.equals(ballPool[rowIndex][columnIndex + 1]))
 				{
-					killBall(rowIndex, columnIndex+1);
+					numToKill++;
 				}
 			}
-			if (rowIndex > 0) //上
+			if (rowIndex > 0) // 上
 			{
-				if (focus.equals(ballPool[rowIndex-1][columnIndex]))
+				if (focus.equals(ballPool[rowIndex - 1][columnIndex]))
 				{
-					killBall(rowIndex-1, columnIndex);
+					numToKill++;
 				}
 			}
-			if (rowIndex < ROW_NUM-1) //下
+			if (rowIndex < ROW_NUM - 1) // 下
 			{
-				if (focus.equals(ballPool[rowIndex+1][columnIndex]))
+				if (focus.equals(ballPool[rowIndex + 1][columnIndex]))
 				{
-					killBall(rowIndex+1, columnIndex);
+					numToKill++;
 				}
 			}
-		}		
+		}
 		
-		return true;
+		return numToKill;
 	}
 	
 	private void up2down()
 	{
+		delay(200);
 		for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex) //一列一列的处理
 		{
 			//类似于冒泡排序,把空的给挪到上面去
@@ -225,11 +240,13 @@ public class BallPool
 				}
 			}
 		}
+		gameView.postInvalidate();
 	}
 	
 	//某一列的最下面一行没球,代表这一列都没球了,右边的所有列向左平移
 	private void right2left()
 	{
+		delay(200);
 		for (int columnIndex = COLUMN_NUM-2; columnIndex >= 0; --columnIndex) //最右边一列无需处理
 		{
 			if (ballPool[ROW_NUM-1][columnIndex] == null)
@@ -243,6 +260,18 @@ public class BallPool
 					}
 				}
 			}
+		}
+		gameView.postInvalidate();
+	}
+	private void delay(int ms)
+	{
+		try
+		{
+			Thread.sleep(ms);
+		}
+		catch(InterruptedException e)
+		{
+			e.printStackTrace();
 		}
 	}
 }
