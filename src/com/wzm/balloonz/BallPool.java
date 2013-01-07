@@ -277,8 +277,8 @@ public class BallPool
 				{
 					ballPool[row][columnIndex] = createColorBall();
 				}
-				delay(50);
 				refresh();
+				delay(100);
 			}
 		}
 	}

@@ -1,18 +1,21 @@
+
 package com.wzm.balloonz;
 
-import java.security.PublicKey;
 
 import android.content.Context;
 import android.graphics.*;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 
 public class BallGameView extends View
 {
 	private BalloonzActivity balloonzActivity;
 	private BallPool ballPool = null;
+	
+	private Button buttonRestart;
 	
 	private Paint textPaint = new Paint();
 	private int score = 0;
@@ -23,7 +26,8 @@ public class BallGameView extends View
 		balloonzActivity = (BalloonzActivity) context;
 		
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.game_back));
-		textPaint.setColor(Color.WHITE);
+		
+		buttonRestart = new Button(context);
 		
 		ballPool = new BallPool(this, balloonzActivity.getLevel());
 		
@@ -38,7 +42,7 @@ public class BallGameView extends View
 
 		ballPool.onDraw(canvas);
 		
-		textPaint.setTextSize(22);
+		textPaint.setTextSize(24);
 		textPaint.setColor(Color.YELLOW);
 		canvas.drawText("·ÖÊý:" + score, 10, 750, textPaint);
 	}
@@ -87,7 +91,7 @@ public class BallGameView extends View
 			
 			if (killNum >= 2)
 			{
-				score = fibonacci(killNum);
+				score += fibonacci(killNum);
 			}
 		}
 	}
