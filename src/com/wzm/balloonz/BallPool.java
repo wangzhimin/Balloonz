@@ -75,15 +75,11 @@ public class BallPool
 	}
 	private void InitBallPool()
 	{
-		int max_num = bitmapCollection.size();
-		
 		for (int row = 0; row < ROW_NUM; ++row)
 		{
 			for (int column = 0; column < COLUMN_NUM; ++column)
-			{
-				int ballIndex = rand.nextInt(max_num);
-				
-				ballPool[row][column] = new ColorBall(ballIndex, bitmapCollection.get(ballIndex));
+			{				
+				ballPool[row][column] = createColorBall();
 			}
 		}
 	}
@@ -125,6 +121,7 @@ public class BallPool
 				{				
 					up2down();	
 					right2left();
+					fillRight();
 				}
 			}
 		}
@@ -137,6 +134,13 @@ public class BallPool
 	}
 	
 	/* 私有函数 */
+	private ColorBall createColorBall()
+	{
+		int max_num = bitmapCollection.size();
+		int ballIndex = rand.nextInt(max_num);
+		
+		return new ColorBall(ballIndex, bitmapCollection.get(ballIndex));
+	}
 	private void killBall(int rowIndex, int columnIndex)
 	{
 		ColorBall me = ballPool[rowIndex][columnIndex];
@@ -239,7 +243,7 @@ public class BallPool
 				}
 			}
 		}
-		gameView.postInvalidate();
+		refresh();
 	}
 	
 	//某一列的最下面一行没球,代表这一列都没球了,右边的所有列向左平移
@@ -260,8 +264,25 @@ public class BallPool
 				}
 			}
 		}
-		gameView.postInvalidate();
+		refresh();
 	}
+	private void fillRight()
+	{
+		delay(200);
+		for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex)
+		{
+			if (ballPool[ROW_NUM-1][columnIndex] == null)
+			{
+				for (int row = 0; row < ROW_NUM; ++row)
+				{
+					ballPool[row][columnIndex] = createColorBall();
+				}
+				delay(50);
+				refresh();
+			}
+		}
+	}
+	
 	private void delay(int ms)
 	{
 		try
@@ -272,5 +293,9 @@ public class BallPool
 		{
 			e.printStackTrace();
 		}
+	}
+	private void refresh()
+	{
+		gameView.postInvalidate();
 	}
 }

@@ -37,6 +37,9 @@ public class BallGameView extends View
 		super.onDraw(canvas);
 
 		ballPool.onDraw(canvas);
+		
+		textPaint.setTextSize(22);
+		textPaint.setColor(Color.YELLOW);
 		canvas.drawText("·ÖÊý:" + score, 10, 750, textPaint);
 	}
 	
