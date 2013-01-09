@@ -95,6 +95,6 @@ public class BitmapMenuGroup
 		Bitmap bitmapMenu = BitmapFactory.decodeResource(_view.getResources(), bitmapId, bfoOptions);
 		Rect menu_rect = new Rect(centerX - bitmapMenu.getWidth() / 2, y, centerX + bitmapMenu.getWidth() / 2 - 1, y + bitmapMenu.getHeight() - 1);
 		
-		return (new BitmapMenu(bitmapMenu, menu_rect));	 
+		return (new BitmapMenu(bitmapMenu, menu_rect));
 	}
 }

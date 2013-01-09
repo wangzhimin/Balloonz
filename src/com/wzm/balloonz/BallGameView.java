@@ -13,6 +13,10 @@ import android.widget.Button;
 public class BallGameView extends View
 {
 	private BalloonzActivity balloonzActivity;
+	
+	private BitmapMenu menuRestart;
+	private Paint picPaint = new Paint();
+	
 	private BallPool ballPool = null;
 	
 	private Button buttonRestart;
@@ -27,22 +31,33 @@ public class BallGameView extends View
 		
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.game_back));
 		
-		buttonRestart = new Button(context);
+		BitmapFactory.Options bfoOptions = new BitmapFactory.Options();
+		bfoOptions.inScaled = false; //图片不缩放
 		
-		ballPool = new BallPool(this, balloonzActivity.getLevel());
+		Bitmap bitmapRestart = BitmapFactory.decodeResource(getResources(), R.drawable.restart, bfoOptions);
+		Rect rect = new Rect(10, 10, 10+bitmapRestart.getWidth(), 10+bitmapRestart.getHeight());
+		menuRestart = new BitmapMenu(bitmapRestart, rect);
+		
+		initGame();
 		
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 		requestFocus();
 	}
-	
+	private void initGame()
+	{
+		ballPool = new BallPool(this, balloonzActivity.getLevel());
+		score = 0;
+	}
 	public void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
 
+		menuRestart.onDraw(canvas, picPaint);
+		
 		ballPool.onDraw(canvas);
 		
-		textPaint.setTextSize(24);
+		textPaint.setTextSize(28);
 		textPaint.setColor(Color.YELLOW);
 		canvas.drawText("分数:" + score, 10, 750, textPaint);
 	}
@@ -55,8 +70,16 @@ public class BallGameView extends View
 			int touchX = (int) event.getX();
 			int touchY = (int) event.getY();
 
-            GameThread gameThread = new GameThread(touchX, touchY);
-            gameThread.start();
+			if (menuRestart.contains(touchX, touchY))
+			{
+				initGame();
+				invalidate();
+			}
+			else
+			{
+				GameThread gameThread = new GameThread(touchX, touchY);
+	            gameThread.start();	
+			}
 		}
 
 		return true;
@@ -95,6 +118,7 @@ public class BallGameView extends View
 			}
 		}
 	}
+	
 	
 	/* 私有函数. */
 	private int fibonacci(int n)
