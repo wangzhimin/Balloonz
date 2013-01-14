@@ -130,7 +130,10 @@ public class BallPool
 	/* 对外接口函数. */
 	public int getKillNum()
 	{
-		return num_of_killed;
+		int num = num_of_killed;
+		num_of_killed = 0;
+		
+		return num;
 	}
 	
 	/* 私有函数 */
