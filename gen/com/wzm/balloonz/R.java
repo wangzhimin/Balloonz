@@ -22,14 +22,15 @@ public final class R {
         public static final int level_l=0x7f020008;
         public static final int level_m=0x7f020009;
         public static final int quit_game=0x7f02000a;
-        public static final int restart=0x7f02000b;
-        public static final int rugby_ball=0x7f02000c;
-        public static final int sound_close=0x7f02000d;
-        public static final int sound_open=0x7f02000e;
-        public static final int start_game=0x7f02000f;
-        public static final int tennis_ball=0x7f020010;
-        public static final int volley_ball=0x7f020011;
-        public static final int welcome_back=0x7f020012;
+        public static final int rank_list=0x7f02000b;
+        public static final int restart=0x7f02000c;
+        public static final int rugby_ball=0x7f02000d;
+        public static final int sound_close=0x7f02000e;
+        public static final int sound_open=0x7f02000f;
+        public static final int start_game=0x7f020010;
+        public static final int tennis_ball=0x7f020011;
+        public static final int volley_ball=0x7f020012;
+        public static final int welcome_back=0x7f020013;
     }
     public static final class layout {
         public static final int activity_balloonz=0x7f030000;

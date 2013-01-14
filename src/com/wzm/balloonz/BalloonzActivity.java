@@ -63,6 +63,11 @@ public class BalloonzActivity extends Activity
 			}
 			break;
 			
+		case Msg_rank:
+			RankListView rankView = new RankListView(this);
+			setContentView(rankView);
+			break;
+			
 		case Msg_quitgame:
 			finish();
 			break;

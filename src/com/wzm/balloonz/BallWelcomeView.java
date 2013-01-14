@@ -101,6 +101,9 @@ public class BallWelcomeView extends View
 				balloonzActivity.processGameMsg(GameMsg.Msg_level);
 				invalidate();
 				break;
+			case 4:
+				balloonzActivity.processGameMsg(GameMsg.Msg_rank);
+				break;
 				
 			case 5: //ÍË³öÓÎÏ·
 				balloonzActivity.processGameMsg(GameMsg.Msg_quitgame);

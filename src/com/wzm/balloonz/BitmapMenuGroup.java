@@ -13,6 +13,7 @@ public class BitmapMenuGroup
 	private BitmapMenu menuLevelLow;
 	private BitmapMenu menuLevelMid;
 	private BitmapMenu menuLevelHigh;
+	private BitmapMenu menuRankList;
 	private BitmapMenu menuQuitGame;
 	
 	BitmapFactory.Options bfoOptions = null;
@@ -36,7 +37,8 @@ public class BitmapMenuGroup
 		menuLevelLow   = getMenu(R.drawable.level_l, 400);        //游戏难度
 		menuLevelMid   = getMenu(R.drawable.level_m, 400);
 		menuLevelHigh  = getMenu(R.drawable.level_h, 400);
-		menuQuitGame   = getMenu(R.drawable.quit_game, 500);      //退出游戏
+		menuRankList   = getMenu(R.drawable.rank_list, 500);
+		menuQuitGame   = getMenu(R.drawable.quit_game, 600);      //退出游戏
 	}
 	
 	public void onDraw(Canvas canvas, Paint paintPicture)
@@ -64,7 +66,7 @@ public class BitmapMenuGroup
 			menuLevelHigh.onDraw(canvas, paintPicture);
 			break;
 		}
-		
+		menuRankList.onDraw(canvas, paintPicture);
 		menuQuitGame.onDraw(canvas, paintPicture);
 	}
 	
@@ -81,6 +83,10 @@ public class BitmapMenuGroup
 		else if (menuLevelLow.contains(x, y))
 		{
 			handlerWelcome.sendEmptyMessage(3);
+		}
+		else if (menuRankList.contains(x, y))
+		{
+			handlerWelcome.sendEmptyMessage(4);
 		}
 		else if (menuQuitGame.contains(x, y))
 		{
