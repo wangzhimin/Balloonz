@@ -31,6 +31,10 @@ public class BallGameView extends View
 		
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.game_back));
 		
+		setFocusable(true);
+		setFocusableInTouchMode(true);
+		requestFocus();
+		
 		BitmapFactory.Options bfoOptions = new BitmapFactory.Options();
 		bfoOptions.inScaled = false; //Í¼Æ¬²»Ëõ·Å
 		
@@ -39,10 +43,6 @@ public class BallGameView extends View
 		menuRestart = new BitmapMenu(bitmapRestart, rect);
 		
 		initGame();
-		
-		setFocusable(true);
-		setFocusableInTouchMode(true);
-		requestFocus();
 	}
 	private void initGame()
 	{
