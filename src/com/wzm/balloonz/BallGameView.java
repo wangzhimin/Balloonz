@@ -47,6 +47,9 @@ public class BallGameView extends View
 	private void initGame()
 	{
 		ballPool = new BallPool(this, balloonzActivity.getLevel());
+		
+		textPaint.setTextSize(28);
+		textPaint.setColor(Color.YELLOW);
 		score = 0;
 	}
 	public void onDraw(Canvas canvas)
@@ -57,8 +60,6 @@ public class BallGameView extends View
 		
 		ballPool.onDraw(canvas);
 		
-		textPaint.setTextSize(28);
-		textPaint.setColor(Color.YELLOW);
 		canvas.drawText("·ÖÊý:" + score, 10, 750, textPaint);
 	}
 	
@@ -115,6 +116,7 @@ public class BallGameView extends View
 			if (killNum >= 2)
 			{
 				score += fibonacci(killNum);
+				postInvalidate();
 			}
 		}
 	}
