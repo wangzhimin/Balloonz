@@ -26,7 +26,7 @@ public class BallPool
 	private int left = 0;
 	private int top  = 0;
 	
-	private ColorBall[][] ballPool = new ColorBall[ROW_NUM][COLUMN_NUM];
+	private ColorBall[][] balls = new ColorBall[ROW_NUM][COLUMN_NUM];
 	private Rect poolRect = null;
 	private int num_of_killed = 0;//真正消的数量
 	private ColorBall ballFocus = null;
@@ -34,13 +34,18 @@ public class BallPool
 	private Paint ballPaint = new Paint();
 	private Random rand = new Random();
 	
+	private boolean game_over = false;
+	
 	public BallPool(BallGameView view, int level)
 	{
 		gameView = view;
 		gameLevel = level;
 		
-		left = 40;
-		top  = 100;
+		left = 40; //(gameView.getWidth() - COLUMN_NUM*ballWidth) / 2;
+		top  = 100; //(gameView.getHeight() - ROW_NUM*ballHeight) / 2;
+		
+		WzmLog.log("w = " + gameView.getWidth());
+		WzmLog.log("h = " + gameView.getHeight());
 		
 		LoadResources();
 		InitBallPool();
@@ -79,7 +84,7 @@ public class BallPool
 		{
 			for (int column = 0; column < COLUMN_NUM; ++column)
 			{				
-				ballPool[row][column] = createColorBall();
+				balls[row][column] = createColorBall();
 			}
 		}
 	}
@@ -93,9 +98,9 @@ public class BallPool
 				int showX = left + column * ballWidth;
 				int showY = top + row * ballHeight;
 				
-				if (ballPool[row][column] != null)
+				if (balls[row][column] != null)
 				{
-					ballPool[row][column].onDraw(canvas, showX, showY, ballPaint);
+					balls[row][column].onDraw(canvas, showX, showY, ballPaint);
 				}
 			}
 		}
@@ -103,6 +108,11 @@ public class BallPool
 	
 	public void processTouchEvent(int x, int y)
 	{
+		if (game_over)
+		{
+			return;
+		}
+		
 		if (poolRect.contains(x, y))
 		{
 			int rowIndex    = (y - top) / ballHeight; //行下标,用纵坐标算
@@ -113,7 +123,7 @@ public class BallPool
 			if (numToKill > 1) //根据相同球的数量,决定是否要消球,只有第一个球才需要判断
 			{
 				num_of_killed = 1;
-				ballFocus = ballPool[rowIndex][columnIndex];
+				ballFocus = balls[rowIndex][columnIndex];
 				killBall(rowIndex, columnIndex);
 				gameView.postInvalidate();
 				
@@ -122,6 +132,9 @@ public class BallPool
 					up2down();	
 					right2left();
 					fillRight();
+					
+					//判断游戏是否已经结束
+					game_over = gameOver();
 				}
 			}
 		}
@@ -135,6 +148,10 @@ public class BallPool
 		
 		return num;
 	}
+	public boolean game_over()
+	{
+		return game_over;
+	}
 	
 	/* 私有函数 */
 	private ColorBall createColorBall()
@@ -146,19 +163,19 @@ public class BallPool
 	}
 	private void killBall(int rowIndex, int columnIndex)
 	{
-		ColorBall me = ballPool[rowIndex][columnIndex];
+		ColorBall me = balls[rowIndex][columnIndex];
 		if (me == null ||
 			!me.equals(ballFocus))
 		{
 			return;
 		}
 		
-		ballPool[rowIndex][columnIndex] = null; // 先把自己消掉,这样邻居在比较的时候就不需要额外的标记
+		balls[rowIndex][columnIndex] = null; // 先把自己消掉,这样邻居在比较的时候就不需要额外的标记
 		num_of_killed++;
 
 		if (columnIndex > 0) // 左
 		{
-			if (me.equals(ballPool[rowIndex][columnIndex - 1]))
+			if (me.equals(balls[rowIndex][columnIndex - 1]))
 			{
 				killBall(rowIndex, columnIndex - 1); // 递归左边
 			}
@@ -166,21 +183,21 @@ public class BallPool
 
 		if (columnIndex < COLUMN_NUM - 1) // 右
 		{
-			if (me.equals(ballPool[rowIndex][columnIndex + 1]))
+			if (me.equals(balls[rowIndex][columnIndex + 1]))
 			{
 				killBall(rowIndex, columnIndex + 1);
 			}
 		}
 		if (rowIndex > 0) // 上
 		{
-			if (me.equals(ballPool[rowIndex - 1][columnIndex]))
+			if (me.equals(balls[rowIndex - 1][columnIndex]))
 			{
 				killBall(rowIndex - 1, columnIndex);
 			}
 		}
 		if (rowIndex < ROW_NUM - 1) // 下
 		{
-			if (me.equals(ballPool[rowIndex + 1][columnIndex]))
+			if (me.equals(balls[rowIndex + 1][columnIndex]))
 			{
 				killBall(rowIndex + 1, columnIndex);
 			}
@@ -190,35 +207,35 @@ public class BallPool
 	private int getNumToKill(int rowIndex, int columnIndex)
 	{
 		int numToKill = 1;
-		ColorBall focus = ballPool[rowIndex][columnIndex];
+		ColorBall focus = balls[rowIndex][columnIndex];
 		
 		if (focus != null)
 		{
 			// 先看一下上下左右有没有相同的球
 			if (columnIndex > 0) // 左
 			{
-				if (focus.equals(ballPool[rowIndex][columnIndex - 1]))
+				if (focus.equals(balls[rowIndex][columnIndex - 1]))
 				{
 					numToKill++;
 				}
 			}
 			if (columnIndex < COLUMN_NUM - 1) // 右
 			{
-				if (focus.equals(ballPool[rowIndex][columnIndex + 1]))
+				if (focus.equals(balls[rowIndex][columnIndex + 1]))
 				{
 					numToKill++;
 				}
 			}
 			if (rowIndex > 0) // 上
 			{
-				if (focus.equals(ballPool[rowIndex - 1][columnIndex]))
+				if (focus.equals(balls[rowIndex - 1][columnIndex]))
 				{
 					numToKill++;
 				}
 			}
 			if (rowIndex < ROW_NUM - 1) // 下
 			{
-				if (focus.equals(ballPool[rowIndex + 1][columnIndex]))
+				if (focus.equals(balls[rowIndex + 1][columnIndex]))
 				{
 					numToKill++;
 				}
@@ -238,10 +255,10 @@ public class BallPool
 			{
 				for (int rowIndex = ROW_NUM - 1; rowIndex > num; --rowIndex) //最上面一行无需处理
 				{
-					if (ballPool[rowIndex][columnIndex] == null)
+					if (balls[rowIndex][columnIndex] == null)
 					{
-						ballPool[rowIndex][columnIndex] = ballPool[rowIndex - 1][columnIndex]; // 往下挪一个
-						ballPool[rowIndex - 1][columnIndex] = null;
+						balls[rowIndex][columnIndex] = balls[rowIndex - 1][columnIndex]; // 往下挪一个
+						balls[rowIndex - 1][columnIndex] = null;
 					}
 				}
 			}
@@ -255,14 +272,14 @@ public class BallPool
 		delay(200);
 		for (int columnIndex = COLUMN_NUM-2; columnIndex >= 0; --columnIndex) //最右边一列无需处理
 		{
-			if (ballPool[ROW_NUM-1][columnIndex] == null)
+			if (balls[ROW_NUM-1][columnIndex] == null)
 			{
 				for (int moveIndex = columnIndex; moveIndex < COLUMN_NUM-1; ++moveIndex) 
 				{
 					for(int row = 0; row < ROW_NUM; ++row)
 					{
-						ballPool[row][moveIndex] = ballPool[row][moveIndex+1];
-						ballPool[row][moveIndex+1] = null;
+						balls[row][moveIndex] = balls[row][moveIndex+1];
+						balls[row][moveIndex+1] = null;
 					}
 				}
 			}
@@ -274,16 +291,37 @@ public class BallPool
 		delay(200);
 		for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex)
 		{
-			if (ballPool[ROW_NUM-1][columnIndex] == null)
+			if (balls[ROW_NUM-1][columnIndex] == null)
 			{
 				for (int row = 0; row < ROW_NUM; ++row)
 				{
-					ballPool[row][columnIndex] = createColorBall();
+					balls[row][columnIndex] = createColorBall();
 				}
 				refresh();
 				delay(100);
 			}
 		}
+	}
+	private boolean gameOver()
+	{
+		for (int rowIndex = 0; rowIndex < ROW_NUM; ++rowIndex)
+		{
+			for (int columnIndex = 0; columnIndex < COLUMN_NUM; ++columnIndex)
+			{
+				if (balls[rowIndex][columnIndex] != null)
+				{
+					int num = getNumToKill(rowIndex, columnIndex);
+					if (num > 1)
+					{
+						return false;
+					}
+				}
+			}
+		}
+		
+		refresh();
+		
+		return true;
 	}
 	
 	private void delay(int ms)

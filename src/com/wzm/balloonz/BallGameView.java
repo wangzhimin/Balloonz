@@ -61,6 +61,11 @@ public class BallGameView extends View
 		ballPool.onDraw(canvas);
 		
 		canvas.drawText("分数:" + score, 10, 750, textPaint);
+		
+		if (ballPool.game_over())
+		{
+			canvas.drawText("游戏结束", 200, 400, textPaint);
+		}
 	}
 	
 	//触屏，消球
