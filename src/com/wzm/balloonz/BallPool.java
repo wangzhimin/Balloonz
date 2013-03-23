@@ -135,6 +135,11 @@ public class BallPool
 					
 					//判断游戏是否已经结束
 					game_over = gameOver();
+					if (game_over)
+					{
+						//数据库
+						
+					}
 				}
 			}
 		}
