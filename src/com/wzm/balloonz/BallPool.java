@@ -122,7 +122,7 @@ public class BallPool
 			
 			if (numToKill > 1) //根据相同球的数量,决定是否要消球,只有第一个球才需要判断
 			{
-				num_of_killed = 1;
+				num_of_killed = 0;
 				ballFocus = balls[rowIndex][columnIndex];
 				killBall(rowIndex, columnIndex);
 				gameView.postInvalidate();
@@ -170,7 +170,7 @@ public class BallPool
 	{
 		ColorBall me = balls[rowIndex][columnIndex];
 		if (me == null ||
-			!me.equals(ballFocus))
+			!me.equals(ballFocus)) //判断球类型是否相同
 		{
 			return;
 		}
