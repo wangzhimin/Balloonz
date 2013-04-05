@@ -9,7 +9,7 @@ import android.view.KeyEvent;
 
 public class BalloonzActivity extends Activity
 {
-	private BallWelcomeView ballWelcomeView;   //欢迎界面
+	private BallWelcomeView ballWelcomeView = null;   //欢迎界面
 	private BallGameView ballGameView = null; //游戏界面
 	
 	private int gameDifficultyLevel = 1;
@@ -88,12 +88,33 @@ public class BalloonzActivity extends Activity
 	    return true;
 	}
 	
-	public void onDestroy()
+	@Override
+	public void onPause ()
+	{
+		super.onPause();
+		
+		
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		
+		WzmLog.log("onResume().");
+	}
+	
+	@Override
+	public void onDestroy ()
 	{
 		GameSoundSystem.getInstance().onDestroy();
+	
+		ballWelcomeView = null;
+		ballGameView = null;
 		
 		super.onDestroy();
 	}
+	
 	/* 对外接口函数. */
 	public int getWidth()
 	{

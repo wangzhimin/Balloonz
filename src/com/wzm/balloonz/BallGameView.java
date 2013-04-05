@@ -22,7 +22,10 @@ public class BallGameView extends View
 	private Button buttonRestart;
 	
 	private Paint textPaint = new Paint();
-	private int score = 0;
+	
+	private int lastKillNum = 0; //最后一次消的个数
+	private int lastScore = 0;   //最后一次消球得分数
+	private int score = 0; //总分数
 	
 	public BallGameView(Context context)
 	{
@@ -60,7 +63,7 @@ public class BallGameView extends View
 		
 		ballPool.onDraw(canvas);
 		
-		canvas.drawText("分数:" + score, 10, 750, textPaint);
+		canvas.drawText("消掉 " + lastKillNum + " 个, " + "得分: " + lastScore + ", 总分数:" + score, 10, 750, textPaint);
 		
 		if (ballPool.game_over())
 		{
@@ -120,14 +123,20 @@ public class BallGameView extends View
 			
 			if (killNum >= 2)
 			{
-				score += fibonacci(killNum);
+				lastKillNum = killNum;
+				lastScore = fibonacci(killNum);
+				score += lastScore;
+				
 				postInvalidate();
+				
+				//写数据库
 			}
 		}
 	}
 	
 	
 	/* 私有函数. */
+	//计算数列
 	private int fibonacci(int n)
 	{		
 		double Root_of_Five = Math.sqrt(5);
