@@ -12,7 +12,7 @@ public class BalloonzActivity extends Activity
 	private BallWelcomeView ballWelcomeView = null;   //欢迎界面
 	private BallGameView ballGameView = null; //游戏界面
 	
-	private int gameDifficultyLevel = 1;
+	private int gameDifficultyLevel = GameLevel.Level_Low; //0,1,2
 	
 	private int width = 480;
 	private int height = 800;
@@ -57,9 +57,9 @@ public class BalloonzActivity extends Activity
 			
 		case Msg_level:
 			gameDifficultyLevel++;
-			if (gameDifficultyLevel > 3)
+			if (gameDifficultyLevel > GameLevel.Level_High)
 			{
-				gameDifficultyLevel = 1;
+				gameDifficultyLevel = GameLevel.Level_Low;
 			}
 			break;
 			

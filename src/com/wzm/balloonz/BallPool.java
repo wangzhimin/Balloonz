@@ -21,7 +21,7 @@ public class BallPool
 	private Bitmap fireballBitmap;
 	private ColorBall ballFireBall;
 	
-	private int gameLevel = 1; //游戏难度
+	private int gameLevel = GameLevel.Level_Low; //游戏难度
 	
 	private int left = 0;
 	private int top  = 0;
@@ -65,13 +65,13 @@ public class BallPool
 		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.volley_ball, bfoOptions));  //排球
 		bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.bowling_ball, bfoOptions)); //保龄球
 		
-		if (gameLevel >= 2)
+		if (gameLevel >= GameLevel.Level_Mid)
 		{
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.tennis_ball, bfoOptions));  //网球
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.rugby_ball, bfoOptions));   //橄榄球
 		}
 		
-		if (gameLevel == 3)
+		if (gameLevel == GameLevel.Level_High)
 		{
 			bitmapCollection.add(BitmapFactory.decodeResource(res, R.drawable.billiards_ball, bfoOptions)); //台球,黑八
 		}
@@ -122,12 +122,14 @@ public class BallPool
 			
 			if (numToKill > 1) //根据相同球的数量,决定是否要消球,只有第一个球才需要判断
 			{
-				num_of_killed = 0;
+				num_of_killed = 0; //初始值为0,killBall中会累加每一个消的球
 				ballFocus = balls[rowIndex][columnIndex];
-				killBall(rowIndex, columnIndex);
+				
+				killBall(rowIndex, columnIndex); //递归消球
+				
 				gameView.postInvalidate();
 				
-				if (num_of_killed > 1) //消了球,才需要重新调整位置
+				if (num_of_killed >= 2) //消了球,才需要重新调整位置
 				{				
 					up2down();	
 					right2left();

@@ -25,7 +25,7 @@ public class BallGameView extends View
 	
 	private int lastKillNum = 0; //最后一次消的个数
 	private int lastScore = 0;   //最后一次消球得分数
-	private int score = 0; //总分数
+	private int TotalScore = 0; //总分数
 	
 	public BallGameView(Context context)
 	{
@@ -53,8 +53,12 @@ public class BallGameView extends View
 		
 		textPaint.setTextSize(28);
 		textPaint.setColor(Color.YELLOW);
-		score = 0;
+		
+		lastKillNum = 0;
+		lastScore = 0;
+		TotalScore = 0;
 	}
+	
 	public void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
@@ -63,7 +67,7 @@ public class BallGameView extends View
 		
 		ballPool.onDraw(canvas);
 		
-		canvas.drawText("消掉 " + lastKillNum + " 个, " + "得分: " + lastScore + ", 总分数:" + score, 10, 750, textPaint);
+		canvas.drawText("消掉 " + lastKillNum + " 个, " + "得分: " + lastScore + ", 总分数:" + TotalScore, 10, 750, textPaint);
 		
 		if (ballPool.game_over())
 		{
@@ -119,17 +123,23 @@ public class BallGameView extends View
 			 //通过点击坐标，定位球的index,消球
 			ballPool.processTouchEvent(touchX, touchY);
 			
+			CalculateScore();
+			postInvalidate();
+				
+			//写数据库
+		}
+		
+		private void CalculateScore()
+		{
 			int killNum = ballPool.getKillNum();
 			
 			if (killNum >= 2)
 			{
 				lastKillNum = killNum;
+				
 				lastScore = fibonacci(killNum);
-				score += lastScore;
-				
-				postInvalidate();
-				
-				//写数据库
+				lastScore *= 1 << (balloonzActivity.getLevel());
+				TotalScore += lastScore;
 			}
 		}
 	}

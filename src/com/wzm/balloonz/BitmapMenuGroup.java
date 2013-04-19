@@ -56,13 +56,13 @@ public class BitmapMenuGroup
 		
 		switch(_view.getLevel())
 		{
-		case 1:
+		case GameLevel.Level_Low:
 			menuLevelLow.onDraw(canvas, paintPicture);
 			break;
-		case 2:
+		case GameLevel.Level_Mid:
 			menuLevelMid.onDraw(canvas, paintPicture);
 			break;
-		case 3:
+		case GameLevel.Level_High:
 			menuLevelHigh.onDraw(canvas, paintPicture);
 			break;
 		}
